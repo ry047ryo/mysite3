@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>multitude - 連帯・カオス・境界線の融解</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700&display=swap');
+        
+        :root {
+            --primary-color: #ff3366;
+            --secondary-color: #3d5af1;
+            --dark-color: #121212;
+            --light-color: #f0f0f0;
+            --accent-color: #ffcc00;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: var(--dark-color);
+            color: var(--light-color);
+            overflow-x: hidden;
+            line-height: 1.7;
+        }
+        
+        .noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAB3RJTUUH5AoTDDYZYWOJJQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAACoklEQVRo3u2aTU8TQRiAn5ldWlrKR0ExgaKJJiQcOGji0YPxqBf1H3jwF+iJg0dvnvTEgZsXjSbeJDFETzVeOEiCxkSgVCAI0m7fcdMxFtput2W3u9j3tN3Zmc4+8847szPvgCRJkiRJkiRJ0n+i+qpHPzk5GTLGhIBBY4wDOEAREEAeWAXWXNddiEQi8xcvB4gxXb4EaPL09PR9Y8xRQAFiC0OhkJqdnc30BMjU1NRVYEQp1S+vXAcaA5xYLLbUVZBEIuEopV4DQ0op5Ubq2lgDnPn5+YWOgcRisbOO47wDfNjM3zXXV+xMpVJvOwLied4ZpVQSCGFjYLOYQjcDkclkPgPRtoG4rntKKZUEQs0QYsOtW11pI+uAE41G3+8JEsdxTiillICOmVYhdoLIAaFoNPqhZZB0On0cWASCrULsBJEHBmKx2MfAsCCO4xwBksBAKxA7QRSAgXA4/CkwDIgx5hCQBPa3CrELRAE4kEgkeoeBuAvsa4bYI0RJKdXTSzLq1hf6bNkFjFV9ZgERQFk5rAAtoVyv/HaVXQpRdkruvgTlcPD1yCF2V/VqnCJ4fmgRO8DsOfY0xA4tUj9UtIUQXWuXrQwV7f8SMY1TqgXELj1Ia6Pi1hAbQNEW/9PUfNsIhYAKaBWIsjBtaEyDr7HtbM+Oc+jKOYTCwLKBUQhZQggDvLcvQu0VFBAGEKiqfboiAIEABLhF0FWvgTHA0UHhGAPLOTDGgBZCrBRcK1esDAojAAFG1LqIMUIt5UB3EMSUKmP6azkF4TfE7LJRoUoxC1BKUShwLABBqVQZQpOH4R0TSwjM3K9uJQJMGTBlSsUCMHR8iIBfpv9n7UJYlCeP7/Dq6QNunL+MEDVhmCRJkiRJkiRJ0i/Z+MZHckZsKwAAAABJRU5ErkJggg==');
+            opacity: 0.05;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            z-index: -1;
+        }
+        
+        .circle-1 {
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(135deg, var(--primary-color), transparent);
+            top: -100px;
+            left: -150px;
+            opacity: 0.3;
+            animation: float 15s infinite alternate;
+        }
+        
+        .circle-2 {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, var(--secondary-color), transparent);
+            bottom: -200px;
+            right: -200px;
+            opacity: 0.3;
+            animation: float 20s infinite alternate-reverse;
+        }
+        
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(50px, 30px) rotate(180deg); }
+            100% { transform: translate(-30px, 50px) rotate(360deg); }
+        }
+        
+        .logo-container {
+            position: relative;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+        
+        .logo {
+            font-size: 4.5rem;
+            font-weight: 700;
+            letter-spacing: -2px;
+            color: var(--light-color);
+            animation: pulse 8s infinite alternate;
+            margin-bottom: 1rem;
+        }
+        
+        @keyframes pulse {
+            0% { text-shadow: 0 0 10px rgba(255, 51, 102, 0.5); }
+            50% { text-shadow: 0 0 20px rgba(61, 90, 241, 0.7); }
+            100% { text-shadow: 0 0 10px rgba(255, 51, 102, 0.5); }
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            font-weight: 300;
+            margin-bottom: 2rem;
+            text-align: center;
+            max-width: 700px;
+            line-height: 1.8;
+        }
+        
+        .established {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-top: 1rem;
+        }
+        
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 0;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            background-color: rgba(18, 18, 18, 0.5);
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--light-color);
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 30px;
+        }
+        
+        .nav-links a {
+            color: var(--light-color);
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+        
+        .section {
+            padding: 100px 0;
+            position: relative;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 50px;
+            height: 4px;
+            background-color: var(--primary-color);
+        }
+        
+        .philosophy {
+            background-color: rgba(255, 255, 255, 0.03);
+            padding: 120px 0;
+        }
+        
+        .philosophy-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+        
+        .philosophy-text {
+            padding-right: 30px;
+        }
+        
+        .quote {
+            font-size: 1.5rem;
+            font-style: italic;
+            margin-bottom: 30px;
+            position: relative;
+            padding-left: 20px;
+            border-left: 3px solid var(--primary-color);
+        }
+        
+        .quote-source {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-top: 10px;
+        }
+        
+        .philosophy-image {
+            position: relative;
+            height: 400px;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .philosophy-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .concepts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .concept-card {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 30px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            backdrop-filter: blur(5px);
+            position: relative;
+            overflow: hidden;
+            min-height: 250px;
+        }
+        
+        .concept-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 51, 102, 0.1), rgba(61, 90, 241, 0.1));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .concept-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .concept-card:hover::before {
+            opacity: 1;
+        }
+        
+        .concept-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+        }
+        
+        .activities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .activity-card {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 30px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            backdrop-filter: blur(5px);
+        }
+        
+        .activity-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .activity-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--light-color);
+        }
+        
+        .manifesto {
+            background-color: rgba(255, 255, 255, 0.03);
+            padding: 120px 0;
+        }
+        
+        .manifesto-text {
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+        
+        .manifesto-text p {
+            margin-bottom: 1.5rem;
+        }
+        
+        .contact {
+            text-align: center;
+            padding: 100px 0;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            margin-top: a0px;
+            gap: 20px;
+        }
+        
+        .social-link {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--light-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            font-size: 1.5rem;
+        }
+        
+        .social-link:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-5px);
+        }
+        
+        footer {
+            padding: 50px 0;
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.3);
+        }
+        
+        .footer-text {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 3rem;
+            }
+            
+            .tagline {
+                font-size: 1rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .philosophy-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .philosophy-text {
+                padding-right: 0;
+                margin-bottom: 30px;
+            }
+            
+            .quote {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="noise"></div>
+    
+    <nav>
+        <div class="container nav-container">
+            <div class="nav-logo">multitude</div>
+            <ul class="nav-links">
+                <li><a href="#about">概要</a></li>
+                <li><a href="#philosophy">理念</a></li>
+                <li><a href="#activities">活動</a></li>
+                <li><a href="#thoughts">私たちの思い</a></li>
+                <li><a href="#contact">お問い合わせ</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <header>
+        <div class="circle circle-1"></div>
+        <div class="circle circle-2"></div>
+        <div class="logo-container">
+            <div class="logo">multitude</div>
+            <p class="established">2024年設立</p>
+        </div>
+        <p class="tagline">連帯・カオス・境界線の融解。<br>私たちは多様性の中に新たな共同体を創造します。</p>
+        <a href="#about" class="social-link">↓</a>
+    </header>
+    
+    <section id="about" class="section">
+        <div class="container">
+            <h2 class="section-title">multitudeとは</h2>
+            <p>私たちのグループは"multitude"という名前を持っています。この名前はイタリアの哲学者アントニオ・ネグリとアメリカの哲学者マイケル・ハートの＜帝国＞論から来ています。グループの名前を決める際に、哲学の概念にしたらカッコいいんじゃないかという理由からその名前が上がり、決まったものでした。</p>
+            <p>しかしこの名前は、私たちの間でたびたび論争を引き起こしました。あるメンバーはその名前から＜連帯＞のイメージを思い浮かべ、つながりが大事だと言いました。また、あるメンバーは＜カオス＞のイメージを重視し、あるメンバーは境界線が融解することで差別や偏見をなくすイメージを抱きました。</p>
+            <p>連帯、カオス、境界線の融解、反差別。「マルチチュード」という言葉にかけるメンバーの思いはそれぞれ違います。しかしその状態こそが、マルチチュードなのだと思います。一つにまとまらない、それぞれが特徴を持つ人間たちの集合。マルチチュードは全てを包み込みます。</p>
+            
+            <div class="concepts">
+                <div class="concept-card">
+                    <h3 class="concept-title">連帯</h3>
+                    <p>差異を認めつつも、共に働き、共に生きるための基盤を作ります。一人では弱くても、互いに支え合うことで力となる共同体を目指します。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h3 class="concept-title">カオス</h3>
+                    <p>予測不可能性と偶然性を受け入れ、そこから生まれる創造性を大切にします。固定化された思考の枠組みを揺るがし、新たな可能性を探ります。</p>
+                </div>
+                
+                <div class="concept-card">
+                    <h3 class="concept-title">境界線の融解</h3>
+                    <p>人種、ジェンダー、国籍など、様々な境界線によって分断された社会を再考し、より流動的で包括的な共同体のビジョンを提示します。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="philosophy" class="philosophy">
+        <div class="container">
+            <div class="philosophy-container">
+                <div class="philosophy-text">
+                    <h2 class="section-title">私たちの理念</h2>
+                    <div class="quote">
+                        マルチチュードは、単一の同一性には決して縮減できない無数の内的差異から成る。
+                        <div class="quote-source">— Hardt & Negri 2004=2005: 19</div>
+                    </div>
+                    <p>私たちが目指すのは、あらゆる差異を自由かつ対等に表現することのできる発展的で開かれたネットワーク、言いかえれば、出会いの手段を提供し、私たちが共に働き生きることを可能にするネットワークです。</p>
+                    <div class="quote">
+                        あらゆる差異を自由かつ対等に表現することのできる発展的で開かれたネットワー ク、言いかえれば、出会いの手段を提供し、私たちが共に働き生きることを可能にするネットワークである。
+                        <div class="quote-source">— Hardt & Negri 2004=2005: 19</div>
+                    </div>
+                    <p>この言葉には、境界線の融解、反差別、連帯、カオス、の意味が全て含まれていると思います。つまり、マルチチュードは私たちの理想や願いを包み込む広い概念なのです。</p>
+                </div>
+                <div class="philosophy-image">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMjIyIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNHB4IiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIj5pbWFnZS1wbGFjZWhvbGRlcjwvdGV4dD48L3N2Zz4=" alt="マルチチュードのコンセプト画像">
+                </div>
+            </div>
+        </div>
+    </section>
+    
+得意とする創作活動を通して、思想を形にしています。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="thoughts" class="manifesto">
+        <div class="container">
+            <h2 class="section-title">私たちの思い</h2>
+            <div class="manifesto-text">
+                <p>先日ドナルド・トランプがアメリカ合衆国大統領に就任しました。私たちは彼の演説内容のニュースを見て落ち込みました。これまで多くの人々が、人種やジェンダーの差別に苦しむ人々の生活を少しでも改善しようと努力してきた歴史を無に帰そうとしているからです。これはアメリカの話ですが、日本も他人事ではいられません。油断せずに、着々と抵抗の拠点をつくる必要があります。</p>
+                
+                <p>しかし「抵抗」と言っても、武装したり徒党を組んだりするつもりはありません。私たち自身が楽しむ必要があるからです。そして「楽しさ」を軸として、マルチチュードを拡大する必要があると考えます。トランプより、私たちの方が面白ければよいというわけです。</p>
+                
+                <p>私は諦めたくありません、"トランプ"に勝つことを。昨今、社会の分断が叫ばれていますが、逆にトランプ的なものは一つにまとまる力が非常に強力です。片方の極にあるシンボルとしてトランプは君臨しており、彼が発する磁力がアメリカ国民の過半数を引き付けているのです。それとは反対に、私たちが目指すのは、身近なところで小さな磁石同士が一つずつくっついていくイメージです。大きな磁石ではなく、あくまで小さな磁石からなる広がりです。</p>
+                
+                <p>もちろん話が通じない場合も多々あると思います。時には失望することも避けられないでしょう。それでも、「アイツとは政治の話がまったく合わないが、遊んだり話したりするのは楽しいんだよな」という感じで、何とかならないでしょうか。例えば好きな映画が一緒だったり、同じアーティストのファンだったり、スポーツでも構いません。「楽しい」「面白い」が共通するだけで、一緒にいるのがそんなに嫌じゃないかも、となれば。</p>
+                
+                <p>とりあえずやってみる、自分たちで。という形で私たちは少しずつ活動しています。続けるうちに、広がりを持つ活動ができていければと思います。なんか違うなと思ったら離れてもいいし、なんか面白そうなことやってるなと思ったらまた参加して大丈夫だし、そういうのを繰り返すことで継続できたら嬉しいです。</p>
+            </div>
+        </div>
+    </section>
+    
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 class="section-title">お問い合わせ</h2>
+            <p>私たちの活動に興味を持っていただけましたか？<br>お気軽にSNSでフォローやメッセージをお送りください。</p>
+            
+            <div class="social-links">
+                <a href="https://instagram.com/multitude2024" target="_blank" class="social-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-instagram"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                </a>
+            </div>
+            
+            <p style="margin-top: 20px;">Instagram: @multitude2024</p>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="container">
+            <p class="footer-text">&copy; 2025 multitude - 連帯・カオス・境界線の融解</p>
+        </div>
+    </footer>
+</body>
+</html>
